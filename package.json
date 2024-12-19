@@ -1,6 +1,6 @@
 {
   "name": "@toolstr/review-request-workflow",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A reusable review request workflow component for Shopify apps.",
   "main": "dist/review-request-workflow.cjs.js",
   "module": "dist/review-request-workflow.es.js",
