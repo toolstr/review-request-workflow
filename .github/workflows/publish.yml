@@ -62,7 +62,7 @@ jobs:
         if: env.publish == 'true'
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOOLSTR_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # 7. Notify of skipped publish
       - name: Skip notification
