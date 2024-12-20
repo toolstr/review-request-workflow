@@ -26,7 +26,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. Check for version changes
+      # 4. Build the package
+      - name: Build package
+        run: npm run build
+
+      # 5. Check for version changes
       - name: Check for version changes
         id: version-check
         run: |
@@ -51,16 +55,15 @@ jobs:
           else
             echo "No major or minor version change detected. Skipping publish."
             echo "publish=false" >> $GITHUB_ENV
-          fi
 
-      # 5. Publish the package (if version change is detected)
+      # 6. Publish the package (if version change is detected)
       - name: Publish to GitHub Packages
         if: env.publish == 'true'
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 6. Notify of skipped publish
+      # 7. Notify of skipped publish
       - name: Skip notification
         if: env.publish == 'false'
         run: echo "No major or minor version change. Publish skipped."

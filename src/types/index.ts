@@ -15,7 +15,7 @@ export interface Customer {
   id: string;
   name: string;
   reviews: Review[];
-  customFields: {
+  usage: {
     [key: string]: number; // Dynamic milestone values (e.g., "QRCodeCreated": 3)
   };
 }

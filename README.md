@@ -8,4 +8,4 @@ A reusable review request workflow component for Shopify apps using heymantle.
 
 ## Usage
 
-`import ReviewPrompt from '@toolstr/review-request-workflow';`
+`import {ReviewPrompt} from '@toolstr/review-request-workflow';`

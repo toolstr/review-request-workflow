@@ -6,25 +6,25 @@ const mockCustomer: Customer = {
   id: "123",
   name: "Shopify Store",
   reviews: [],
-  customFields: {
-    QRCodeCreated: 3,
-    QRCodeUpdated: 1,
-    SettingsUpdated: 0,
+  usage: {
+    "QR Code Created": 11,
+    "QR Code Updated": 0,
+    "Settings Updated": 0,
   },
 };
 
 const mockMilestones: Milestone[] = [
   {
     name: "QR Code created",
-    targets: [1, 2, 3, 4, 5],
-    source: "QRCodeCreated",
+    targets: [10],
+    source: "QR Code Created",
   },
   {
-    name: "QR Code updated",
-    targets: [1, 2, 3, 4, 5],
-    source: "QRCodeUpdated",
+    name: "QR Code Updated",
+    targets: [1, 2, 3, 4, 5, 100],
+    source: "QR Code Updated",
   },
-  { name: "Settings updated", targets: [1, 5], source: "SettingsUpdated" },
+  { name: "Settings Updated", targets: [1, 5], source: "SettingsUpdated" },
 ];
 
 const App: React.FC = () => {
