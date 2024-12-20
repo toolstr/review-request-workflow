@@ -14,8 +14,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "npm run build",
-    "publish": "npm publish --access=public"
+    "prepare": "npm run build"
   },
   "keywords": [
     "react",
