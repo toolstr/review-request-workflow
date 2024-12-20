@@ -55,6 +55,7 @@ jobs:
           else
             echo "No major or minor version change detected. Skipping publish."
             echo "publish=false" >> $GITHUB_ENV
+          fi
 
       # 6. Publish the package (if version change is detected)
       - name: Publish to GitHub Packages
