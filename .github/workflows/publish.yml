@@ -1,0 +1,66 @@
+name: Publish to GitHub Packages
+
+on:
+  push:
+    branches:
+      - main # Trigger the action on push to the 'main' branch
+
+jobs:
+  publish:
+    name: Publish Package to GitHub Packages
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18 # Ensure compatibility with your package
+          registry-url: https://npm.pkg.github.com/
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Check for version changes
+      - name: Check for version changes
+        id: version-check
+        run: |
+          git fetch --prune --unshallow
+          # Extract the current and previous package.json versions
+          CURRENT_VERSION=$(jq -r .version < package.json)
+          PREVIOUS_VERSION=$(git show HEAD^:package.json | jq -r .version)
+
+          echo "Current version: $CURRENT_VERSION"
+          echo "Previous version: $PREVIOUS_VERSION"
+
+          # Extract major, minor, and patch versions
+          CURRENT_MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
+          CURRENT_MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
+          PREVIOUS_MAJOR=$(echo $PREVIOUS_VERSION | cut -d. -f1)
+          PREVIOUS_MINOR=$(echo $PREVIOUS_VERSION | cut -d. -f2)
+
+          # Check if major or minor versions have changed
+          if [[ $CURRENT_MAJOR -gt $PREVIOUS_MAJOR || $CURRENT_MINOR -gt $PREVIOUS_MINOR ]]; then
+            echo "Major or minor version change detected. Publishing."
+            echo "publish=true" >> $GITHUB_ENV
+          else
+            echo "No major or minor version change detected. Skipping publish."
+            echo "publish=false" >> $GITHUB_ENV
+          fi
+
+      # 5. Publish the package (if version change is detected)
+      - name: Publish to GitHub Packages
+        if: env.publish == 'true'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 6. Notify of skipped publish
+      - name: Skip notification
+        if: env.publish == 'false'
+        run: echo "No major or minor version change. Publish skipped."
