@@ -60,7 +60,7 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
       const { name, targets, source } = milestone;
 
       // Get the source value dynamically from the customer object
-      const sourceValue = customer.customFields[source];
+      const sourceValue = customer.usage[source];
 
       for (const target of targets) {
         if (sourceValue >= target && !isMilestoneDismissed(name, target)) {
@@ -75,7 +75,7 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   const handleDismiss = () => {
     if (currentMilestone) {
       const { name, source } = currentMilestone;
-      const sourceValue = customer.customFields[source];
+      const sourceValue = customer.usage[source];
       markMilestoneAsDismissed(name, sourceValue);
     }
     setIsOpen(false);
@@ -84,7 +84,7 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   const handleReview = () => {
     if (currentMilestone) {
       const { name, source } = currentMilestone;
-      const sourceValue = customer.customFields[source];
+      const sourceValue = customer.usage[source];
       markMilestoneAsDismissed(name, sourceValue);
     }
     onReview?.();

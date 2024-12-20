@@ -43,7 +43,7 @@ export const useReviewPrompt = ({
     for (const milestone of milestones) {
       const { name, targets, source } = milestone;
 
-      const sourceValue = customer.customFields[source];
+      const sourceValue = customer.usage[source];
 
       for (const target of targets) {
         if (sourceValue >= target && !isMilestoneDismissed(name, target)) {
@@ -58,7 +58,7 @@ export const useReviewPrompt = ({
   const dismissPrompt = () => {
     if (currentMilestone) {
       const { name, source } = currentMilestone;
-      const sourceValue = customer.customFields[source];
+      const sourceValue = customer.usage[source];
       markMilestoneAsDismissed(name, sourceValue);
     }
     setIsOpen(false);
@@ -67,7 +67,7 @@ export const useReviewPrompt = ({
   const reviewPrompt = () => {
     if (currentMilestone) {
       const { name, source } = currentMilestone;
-      const sourceValue = customer.customFields[source];
+      const sourceValue = customer.usage[source];
       markMilestoneAsDismissed(name, sourceValue);
     }
     setIsOpen(false);

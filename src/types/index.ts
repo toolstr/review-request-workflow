@@ -8,7 +8,7 @@ export interface Review {
 export interface Milestone {
   name: string; // Milestone name (e.g., "QR Code created")
   targets: number[]; // Array of target thresholds (e.g., [1, 5, 10])
-  source: string; // Key in `customer.customFields` (e.g., "QRCodeCreated")
+  source: string; // Key in `customer.usage` (e.g., "QR Code Created")
 }
 
 export interface Customer {
