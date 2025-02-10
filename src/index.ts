@@ -1,1 +1,1 @@
-export * from "./components/ReviewPrompt";
+export { default as ReviewPrompt } from "./components/ReviewPrompt";

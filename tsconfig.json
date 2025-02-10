@@ -12,5 +12,5 @@
     "moduleResolution": "bundler"
   },
   "include": ["src", "tsconfig.json"],
-  "exclude": ["test/**/*", "dist-types/**/*"]
+  "exclude": ["test/**/*", "dist-types/**/*", "example"]
 }

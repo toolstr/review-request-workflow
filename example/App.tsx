@@ -1,6 +1,8 @@
 import React from "react";
-import ReviewPrompt from "./components/ReviewPrompt";
-import { Customer, Milestone } from "./types";
+import ReviewPrompt from "../src/components/ReviewPrompt";
+import { Customer, Milestone } from "../src/types";
+import "./index.css";
+import "./App.css";
 
 const mockCustomer: Customer = {
   id: "123",

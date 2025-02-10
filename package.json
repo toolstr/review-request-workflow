@@ -1,22 +1,23 @@
 {
   "name": "@toolstr/review-request-workflow",
-  "version": "1.2.0",
+  "version": "1.5.0",
   "description": "A reusable review request workflow component for Shopify apps using heymantle.",
-  "main": "dist/dist-es/src/review-request-workflow.cjs.js",
-  "module": "dist/dist-es/src/review-request-workflow.es.js",
-  "types": "dist/dist-types/src/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "concurrently 'yarn:build:es' 'yarn:build:types'",
+    "build": "concurrently 'npm:build:es' 'npm:build:types' 'npm:build:example'",
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "npm run build",
     "build:es": "tsc -p tsconfig.es.json",
-    "build:types": "tsc -p tsconfig.types.json"
+    "build:types": "tsc -p tsconfig.types.json",
+    "build:example": "tsc -p tsconfig.example.json"
   },
   "keywords": [
     "react",
@@ -30,10 +31,11 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/toolstr/review-request-workflow.git"
+    "url": "git+https://github.com/toolstr/review-request-workflow.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com",
+    "url": "https://github.com/toolstr/review-request-workflow.git"
   },
   "dependencies": {
     "@shopify/polaris": "^13.9.2",
