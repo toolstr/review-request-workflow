@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18 # Ensure compatibility with your package
+          node-version: 22 # Ensure compatibility with your package
           registry-url: https://npm.pkg.github.com/
 
       # 3. Install dependencies
