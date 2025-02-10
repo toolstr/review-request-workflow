@@ -10,7 +10,8 @@ export const useReviewPrompt = ({
   customer,
   milestones,
 }: UseReviewPromptOptions) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const [currentMilestone, setCurrentMilestone] = useState<Milestone | null>(
     null
   );

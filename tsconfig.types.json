@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig",
+    "compilerOptions": {
+      "rootDir": "src",
+      "removeComments": false,
+      "declaration": true,
+      "declarationDir": "dist",
+      "outDir": "dist",
+      "emitDeclarationOnly": true,
+      "esModuleInterop": true,
+      "jsx": "react-jsx"
+    },
+    "exclude": ["test/**/*", "dist/**/*"]
+  }
+  

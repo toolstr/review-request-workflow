@@ -1,7 +1,16 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "downlevelIteration": true,
+    "incremental": false, // Disable incremental compilation
+    "removeComments": true, // Remove comments from the output
+    // "resolveJsonModule": true, // Resolve JSON modules
+    "rootDir": ".", // Root directory for source files
+    "useUnknownInCatchVariables": false, // Use unknown in catch variables
+    "jsx": "react-jsx", // Use React JSX syntax
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler"
+  },
+  "include": ["src", "tsconfig.json"],
+  "exclude": ["test/**/*", "dist-types/**/*"]
 }

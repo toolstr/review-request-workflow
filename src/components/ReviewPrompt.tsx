@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Modal, Text } from "@shopify/polaris";
 import { ExternalIcon } from "@shopify/polaris-icons";
 import { Customer, Milestone } from "../types";
@@ -24,7 +24,7 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   onReview,
   reviewUrl,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentMilestone, setCurrentMilestone] = useState<Milestone | null>(
     null
   );
