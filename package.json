@@ -1,12 +1,13 @@
 {
   "name": "@toolstr/review-request-workflow",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "A reusable review request workflow component for Shopify apps using heymantle.",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "dist-example"
   ],
   "type": "module",
   "scripts": {
