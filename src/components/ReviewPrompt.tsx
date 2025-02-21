@@ -1,5 +1,5 @@
-import  { useEffect, useState } from "react";
-import { Modal, Text } from "@shopify/polaris";
+import { useEffect, useState } from "react";
+import { Modal, Text, Checkbox, Button } from "@shopify/polaris";
 import { ExternalIcon } from "@shopify/polaris-icons";
 import { Customer, Milestone } from "../types";
 
@@ -11,23 +11,29 @@ interface ReviewPromptProps {
   dismissLabel?: string;
   reviewLabel?: string;
   onReview?: () => void;
-  reviewUrl: string; // URL to redirect for review submission
+  reviewUrl: string;
+  doNotAskLabel?: string;
+  remindLaterLabel?: string;
+  confirmLabel?: string;
 }
 
 const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   customer,
   milestones,
   title = "Enjoying our app?",
-  message = "We’d love it if you could leave us a review!",
-  dismissLabel = "Not Now",
+  message = "We'd love it if you could leave us a review!",
   reviewLabel = "Leave a Review",
   onReview,
   reviewUrl,
+  doNotAskLabel = "Do not ask again",
+  remindLaterLabel = "Remind me later",
+  confirmLabel = "Confirm",
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentMilestone, setCurrentMilestone] = useState<Milestone | null>(
     null
   );
+  const [doNotAsk, setDoNotAsk] = useState<boolean>(false);
 
   const isMilestoneDismissed = (milestoneName: string, target: number) => {
     const dismissed = sessionStorage.getItem("dismissedMilestones");
@@ -49,17 +55,18 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   };
 
   useEffect(() => {
-    // Exit if the user has already left a review
+    const hasDismissed = localStorage.getItem("hideReviewPrompt");
+    if (hasDismissed) {
+      return;
+    }
+
     if (customer.reviews.length > 0) {
       setIsOpen(false);
       return;
     }
 
-    // Evaluate milestone state dynamically
     for (const milestone of milestones) {
       const { name, targets, source } = milestone;
-
-      // Get the source value dynamically from the customer object
       const sourceValue = customer.usage[source];
 
       for (const target of targets) {
@@ -81,6 +88,13 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
     setIsOpen(false);
   };
 
+  const handleDoNotAskAgain = () => {
+    if (doNotAsk) {
+      localStorage.setItem("hideReviewPrompt", "true");
+    }
+    setIsOpen(false);
+  };
+
   const handleReview = () => {
     if (currentMilestone) {
       const { name, source } = currentMilestone;
@@ -93,26 +107,36 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   };
 
   return (
-    <Modal
-      primaryAction={{
-        content: reviewLabel,
-        icon: ExternalIcon,
-        external: true,
-        onAction: handleReview,
-      }}
-      secondaryActions={[
-        {
-          content: dismissLabel,
-          onAction: handleDismiss,
-        },
-      ]}
-      size="large"
-      open={isOpen}
-      onClose={handleDismiss}
-      title={title}
-    >
+    <Modal size="large" open={isOpen} onClose={handleDismiss} title={title}>
       <Modal.Section>
-        <Text as="p">{message}</Text>
+        <div style={{ textAlign: "left" }}>
+          <Text as="p">{message}</Text>
+          <Checkbox
+            label={doNotAskLabel}
+            checked={doNotAsk}
+            onChange={(newChecked) => setDoNotAsk(newChecked)}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "20px",
+          }}
+        >
+          <Button onClick={handleDismiss}>{remindLaterLabel}</Button>
+          <Button onClick={handleDoNotAskAgain} disabled={!doNotAsk}>
+            {confirmLabel}
+          </Button>
+          <Button
+            variant="primary"
+            icon={ExternalIcon}
+            external
+            onClick={handleReview}
+          >
+            {reviewLabel}
+          </Button>
+        </div>
       </Modal.Section>
     </Modal>
   );
