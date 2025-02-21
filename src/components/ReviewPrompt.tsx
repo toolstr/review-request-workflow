@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal, Text, Button } from "@shopify/polaris";
+import { Box, Button, InlineStack, Modal, Text } from "@shopify/polaris";
 import { ExternalIcon } from "@shopify/polaris-icons";
 import { Customer, Milestone } from "../types";
 
@@ -25,7 +25,6 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   reviewLabel = "Leave a Review",
   onReview,
   reviewUrl,
-
   remindLaterLabel = "Remind me later",
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -98,30 +97,26 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   };
 
   return (
-    <Modal size="medium" open={isOpen} onClose={handleDismiss} title={title}>
+    <Modal size="small" open={isOpen} onClose={handleDismiss} title={title}>
       <Modal.Section>
-        <div style={{ textAlign: "left" }}>
-          <Text as="p">{message}</Text>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "20px",
-          }}
-        >
-          <div style={{ marginRight: "10px" }}>
+        <Box>
+          <Text as="p" alignment="start">
+            {message}
+          </Text>
+        </Box>
+        <Box padding="200">
+          <InlineStack align="end" gap="200" blockAlign="end" >
             <Button onClick={handleDismiss}>{remindLaterLabel}</Button>
-          </div>
-          <Button
-            variant="primary"
-            icon={ExternalIcon}
-            external
-            onClick={handleReview}
-          >
-            {reviewLabel}
-          </Button>
-        </div>
+            <Button
+              variant="primary"
+              icon={ExternalIcon}
+              external
+              onClick={handleReview}
+            >
+              {reviewLabel}
+            </Button>
+          </InlineStack>
+        </Box>
       </Modal.Section>
     </Modal>
   );
