@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal, Text, Checkbox, Button } from "@shopify/polaris";
+import { Modal, Text, Button } from "@shopify/polaris";
 import { ExternalIcon } from "@shopify/polaris-icons";
 import { Customer, Milestone } from "../types";
 
@@ -25,15 +25,13 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   reviewLabel = "Leave a Review",
   onReview,
   reviewUrl,
-  doNotAskLabel = "Do not ask again",
+
   remindLaterLabel = "Remind me later",
-  confirmLabel = "Confirm",
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentMilestone, setCurrentMilestone] = useState<Milestone | null>(
     null
   );
-  const [doNotAsk, setDoNotAsk] = useState<boolean>(false);
 
   const isMilestoneDismissed = (milestoneName: string, target: number) => {
     const dismissed = sessionStorage.getItem("dismissedMilestones");
@@ -88,13 +86,6 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
     setIsOpen(false);
   };
 
-  const handleDoNotAskAgain = () => {
-    if (doNotAsk) {
-      localStorage.setItem("hideReviewPrompt", "true");
-    }
-    setIsOpen(false);
-  };
-
   const handleReview = () => {
     if (currentMilestone) {
       const { name, source } = currentMilestone;
@@ -107,27 +98,21 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   };
 
   return (
-    <Modal size="large" open={isOpen} onClose={handleDismiss} title={title}>
+    <Modal size="medium" open={isOpen} onClose={handleDismiss} title={title}>
       <Modal.Section>
         <div style={{ textAlign: "left" }}>
           <Text as="p">{message}</Text>
-          <Checkbox
-            label={doNotAskLabel}
-            checked={doNotAsk}
-            onChange={(newChecked) => setDoNotAsk(newChecked)}
-          />
         </div>
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             marginTop: "20px",
           }}
         >
-          <Button onClick={handleDismiss}>{remindLaterLabel}</Button>
-          <Button onClick={handleDoNotAskAgain} disabled={!doNotAsk}>
-            {confirmLabel}
-          </Button>
+          <div style={{ marginRight: "10px" }}>
+            <Button onClick={handleDismiss}>{remindLaterLabel}</Button>
+          </div>
           <Button
             variant="primary"
             icon={ExternalIcon}
