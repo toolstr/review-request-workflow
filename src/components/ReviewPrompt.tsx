@@ -17,6 +17,10 @@ interface ReviewPromptProps {
   confirmLabel?: string;
 }
 
+const getSourceValue = (customer: Customer, source: string) => {
+  return customer?.usage?.[source]?.allTimeValue;
+};
+
 const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   customer,
   milestones,
@@ -64,7 +68,7 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
 
     for (const milestone of milestones) {
       const { name, targets, source } = milestone;
-      const sourceValue = customer.usage[source];
+      const sourceValue = getSourceValue(customer, source);
 
       for (const target of targets) {
         if (sourceValue >= target && !isMilestoneDismissed(name, target)) {
@@ -79,7 +83,7 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   const handleDismiss = () => {
     if (currentMilestone) {
       const { name, source } = currentMilestone;
-      const sourceValue = customer.usage[source];
+      const sourceValue = getSourceValue(customer, source);
       markMilestoneAsDismissed(name, sourceValue);
     }
     setIsOpen(false);
@@ -88,7 +92,7 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   const handleReview = () => {
     if (currentMilestone) {
       const { name, source } = currentMilestone;
-      const sourceValue = customer.usage[source];
+      const sourceValue = getSourceValue(customer, source);
       markMilestoneAsDismissed(name, sourceValue);
     }
     onReview?.();
