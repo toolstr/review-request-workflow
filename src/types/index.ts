@@ -4,7 +4,7 @@ export interface Review {
   comment?: string;
   createdAt: string;
 }
-export interface MetricData {
+export interface UsageMetric {
   id: string;
   name: string;
   eventName: string;
@@ -38,14 +38,67 @@ export interface Milestone {
 // }
 
 
-export interface Usage {
-  [key: string]: MetricData;  // This allows any string key mapping to MetricData
-}
 
+
+/**
+ * The currently authenticated user of your app
+ */
 export interface Customer {
+  /** The ID of the customer */
   id: string;
-  name: string;
+  /** The name of the customer */
+  name?: string;
+  /** Whether the customer is a test customer */
+  test: boolean;
+  /** The customer's preferred currency */
+  preferredCurrency?: string;
+  /** The platform the customer is on, one of "shopify", "web" or "mantle" */
+  platform?: "shopify" | "web" | "mantle";
+  /** The ID of the customer on the platform */
+  platformId?: string;
+  /** The myshopify domain of the customer, if on the Shopify platform */
+  myshopifyDomain?: string;
+  /** The date the customer was first seen or installed */
+  installedAt?: Date;
+  /** If the customer has or had a trial, the date that it started */
+  trialStartsAt?: Date;
+  /** If the customer has or had a trial, the date that it ended */
+  trialExpiresAt?: Date;
+  /** The plans available to the customer */
+  plans: unknown[];
+  /** The subscription of the current customer, if any */
+  subscription?: unknown;
+  /** The payment method of the current customer, if any */
+  paymentMethod?: unknown;
+  /** The features enabled for the current customer */
+  features: Record<string, unknown>;
+  /** The usage metrics for the current customer */
+  usage: Record<string, UsageMetric>;
+  /** The custom fields on the customer */
+  customFields?: Record<string, unknown>;
+  /** The invoice of the current customer, if the customer is billed via Stripe */
+  currentInvoice?: unknown;
+  /** The usage credits of the customer */
+  usageCredits: unknown[];
+  /** Reviews left by the customer on a platform's app store */
   reviews: Review[];
-  usage: Usage; // Changed from { [key: string]: number } to Usage type
+  /** The current billing status of the customer */
+  billingStatus: "none" | "active" | "trialing" | "canceled" | "frozen";
 }
 
+
+
+
+export interface ReviewPromptProps {
+  customer: Customer;
+  milestones: Milestone[];
+  title?: string;
+  message?: string;
+  dismissLabel?: string;
+  reviewLabel?: string;
+  onReview?: () => void;
+  reviewUrl: string;
+  doNotAskLabel?: string;
+  remindLaterLabel?: string;
+  confirmLabel?: string;
+}

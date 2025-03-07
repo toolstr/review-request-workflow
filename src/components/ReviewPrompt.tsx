@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Box, Button, InlineStack, Modal, Text } from "@shopify/polaris";
 import { ExternalIcon } from "@shopify/polaris-icons";
-import { Customer, Milestone } from "../types";
+import { Customer, Milestone } from "../index";
+import { getSourceValue } from "../hooks/useReviewPrompt";
 
 interface ReviewPromptProps {
   customer: Customer;
@@ -17,8 +18,13 @@ interface ReviewPromptProps {
   confirmLabel?: string;
 }
 
-const getSourceValue = (customer: Customer, source: string) => {
-  return customer?.usage?.[source]?.allTimeValue;
+
+
+const logger = (...args: unknown[]) => {
+  const isDebug = localStorage.getItem('__TOOLSTR__TEAM_DEBUG__');
+  if (isDebug) { 
+    console.log(`[ReviewPrompt]`, ...args);
+  }
 };
 
 const ReviewPrompt: React.FC<ReviewPromptProps> = ({
@@ -39,9 +45,10 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
   const isMilestoneDismissed = (milestoneName: string, target: number) => {
     const dismissed = sessionStorage.getItem("dismissedMilestones");
     const dismissedList = dismissed ? JSON.parse(dismissed) : [];
+ // Check if any higher or equal target was dismissed for this milestone
     return dismissedList.some(
       (entry: { name: string; target: number }) =>
-        entry.name === milestoneName && entry.target === target
+        entry.name === milestoneName && entry.target >= target
     );
   };
 
@@ -69,13 +76,15 @@ const ReviewPrompt: React.FC<ReviewPromptProps> = ({
     for (const milestone of milestones) {
       const { name, targets, source } = milestone;
       const sourceValue = getSourceValue(customer, source);
+      const isTargetMet = targets.some(target => 
+        sourceValue >= target && !isMilestoneDismissed(name, target)
+      );
+      logger(`isTargetMet: source: ${source}, sourceValue: ${sourceValue}, targets: ${targets.join(", ")}, isTargetMet: ${isTargetMet}`);
 
-      for (const target of targets) {
-        if (sourceValue >= target && !isMilestoneDismissed(name, target)) {
-          setCurrentMilestone(milestone);
-          setIsOpen(true);
-          return;
-        }
+      if (isTargetMet) {
+        setCurrentMilestone(milestone);
+        setIsOpen(true);
+        break;
       }
     }
   }, [customer, milestones]);

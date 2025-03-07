@@ -11,7 +11,7 @@
   ],
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "concurrently 'npm:build:es' 'npm:build:types' 'npm:build:example'",
     "lint": "eslint .",
     "preview": "vite preview",

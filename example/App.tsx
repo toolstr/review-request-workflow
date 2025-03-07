@@ -1,6 +1,5 @@
 import React from "react";
-import ReviewPrompt from "../src/components/ReviewPrompt";
-import { Customer, Milestone } from "../src/types";
+import { Customer, Milestone, ReviewPrompt } from "../src";
 import "./index.css";
 import "./App.css";
 
@@ -9,24 +8,49 @@ const mockCustomer: Customer = {
   name: "Shopify Store",
   reviews: [],
   usage: {
-    "QR Code Created": 11,
-    "QR Code Updated": 0,
-    "Settings Updated": 0,
+    "Basic QR Codes": {
+      id: "123",
+      name: "QR Code Created",
+      eventName: "basic_qr_codes_created",
+      allTimeValue: 5,
+      currentPeriod: "calendar_month",
+      currentPeriodStartDate: null,
+      currentPeriodEndDate: null,
+    },
+    "Dynamic QR Codes": {
+      id: "123",
+      name: "Dynamic QR Codes",
+      eventName: "dynamic_qr_code_created",
+      allTimeValue: 10,
+      currentPeriod: "calendar_month",
+      currentPeriodStartDate: null,
+      currentPeriodEndDate: null,
+    },
   },
-};
+  test: false,
+  plans: [],
+  features: {},
+  usageCredits: [],
+  billingStatus: "active",
+} as Customer;
+
+// Create an array of targets that are multiples of 5 up to 100
+const multiplesOfFive = Array.from({ length: 20 }, (_, i) => (i + 1) * 5);  // [5, 10, 15, 20, 25, ..., 100]
+
+// Create an array of sequential targets from 1 to 5
+const sequentialTargets = Array.from({ length: 20 }, (_, i) => i + 1); 
 
 const mockMilestones: Milestone[] = [
   {
     name: "QR Code created",
-    targets: [10],
-    source: "QR Code Created",
+    targets: multiplesOfFive, 
+    source: "Basic QR Codes",
   },
   {
-    name: "QR Code Updated",
-    targets: [1, 2, 3, 4, 5, 100],
-    source: "QR Code Updated",
+    name: "Dynamic QR Code Updated",
+    targets: sequentialTargets, 
+    source: "Dynamic QR Codes",
   },
-  { name: "Settings Updated", targets: [1, 5], source: "SettingsUpdated" },
 ];
 
 const App: React.FC = () => {
@@ -36,7 +60,7 @@ const App: React.FC = () => {
       milestones={mockMilestones}
       reviewUrl="https://apps.shopify.com/super-qr-codes"
       title="Enjoying QR Codes?"
-      message="We’d love your feedback! Leave us a review."
+      message="We'd love your feedback! Leave us a review."
       dismissLabel="Not Now"
       reviewLabel="Leave a Review"
     />

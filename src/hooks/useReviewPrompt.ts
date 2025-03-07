@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import { Customer, Milestone } from "../types";
+import { Customer, Milestone } from "../index";
+
+export const getSourceValue = (customer: Customer, source: string) => {
+  return customer?.usage?.[source]?.allTimeValue;
+};
 
 interface UseReviewPromptOptions {
   customer: Customer;
@@ -28,11 +32,21 @@ export const useReviewPrompt = ({
   const markMilestoneAsDismissed = (milestoneName: string, target: number) => {
     const dismissed = sessionStorage.getItem("dismissedMilestones");
     const dismissedList = dismissed ? JSON.parse(dismissed) : [];
-    dismissedList.push({ name: milestoneName, target });
-    sessionStorage.setItem(
-      "dismissedMilestones",
-      JSON.stringify(dismissedList)
+    
+    // Check if milestone with same name and target already exists
+    const exists = dismissedList.some(
+      (entry: { name: string; target: number }) =>
+        entry.name === milestoneName && entry.target === target
     );
+    
+    // Only add if it doesn't exist
+    if (!exists) {
+      dismissedList.push({ name: milestoneName, target });
+      sessionStorage.setItem(
+        "dismissedMilestones",
+        JSON.stringify(dismissedList)
+      );
+    }
   };
 
   useEffect(() => {
@@ -44,7 +58,7 @@ export const useReviewPrompt = ({
     for (const milestone of milestones) {
       const { name, targets, source } = milestone;
 
-      const sourceValue = customer.usage[source];
+      const sourceValue = getSourceValue(customer, source);
 
       for (const target of targets) {
         if (sourceValue >= target && !isMilestoneDismissed(name, target)) {
@@ -59,7 +73,7 @@ export const useReviewPrompt = ({
   const dismissPrompt = () => {
     if (currentMilestone) {
       const { name, source } = currentMilestone;
-      const sourceValue = customer.usage[source];
+      const sourceValue = getSourceValue(customer, source);
       markMilestoneAsDismissed(name, sourceValue);
     }
     setIsOpen(false);
@@ -68,7 +82,7 @@ export const useReviewPrompt = ({
   const reviewPrompt = () => {
     if (currentMilestone) {
       const { name, source } = currentMilestone;
-      const sourceValue = customer.usage[source];
+      const sourceValue = getSourceValue(customer, source);
       markMilestoneAsDismissed(name, sourceValue);
     }
     setIsOpen(false);
